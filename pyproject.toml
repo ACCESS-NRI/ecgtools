@@ -58,7 +58,7 @@ skip-string-normalization = true
 [tool.pixi.workspace]
 channels = ["accessnri", "conda-forge", "nodefaults"]
 name = "ecgtools-dev"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64", "win-64"]
 version = "0.1.0"
 
 [tool.pixi.dependencies]
