@@ -1,12 +1,6 @@
 name: CI
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-  schedule:
-    - cron: "0 0 * * *" # Daily “At 00:00”
-  workflow_dispatch: # allows you to trigger manually
+
+on: [pull_request, push, workflow_dispatch]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
