@@ -83,6 +83,7 @@ pytest-cov = "*"
 pytest-sugar = "*"
 pytest-xdist = "*"
 s3fs = "*"
+coverage = "*"
 
 [tool.pixi.environments]
 dev = { features = ["dev"], solve-group = "default" }
@@ -93,7 +94,8 @@ test-py313 = { features = ["py313", "dev"] }
 
 
 [tool.pixi.feature.dev.tasks]
-test = {cmd = "pytest tests", description = "Run the test suite"}
+test = {cmd = "pytest tests", description = "Run tests"}
+test-cov = {cmd = "coverage run -m --source=ecgtools pytest tests && coverage xml", description = "Run tests with coverage and generate xml report"}
 
 [tool.pixi.feature.py310.dependencies]
 python = "3.10.*"

@@ -7829,8 +7829,8 @@ packages:
   timestamp: 1734368817583
 - pypi: ./
   name: ecgtools
-  version: 0.0.post135+dirty
-  sha256: 3f8d7ebafe8fdd76491368b09f8e71d6c6a4ecf049e54da07ffd1621756b9cb5
+  version: 0.0.post138+dirty
+  sha256: f60a8853284f96f4a9aca935f94252b66b57d94802884e25b868c65f9cd7c2c9
   requires_dist:
   - cf-xarray
   - joblib
