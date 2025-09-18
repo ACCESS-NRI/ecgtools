@@ -1,7 +1,89 @@
-[tool.black]
-line-length = 100
-target-version = ['py38']
-skip-string-normalization = true
-
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecgtools"
+description = "ESM Catalog Generation Utilities"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache Software License 2.0"}
+maintainers = [
+    {name = "NCAR XDev Team", email = "xdev@ucar.edu"}
+]
+keywords = ["ecgtools"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "cf_xarray",
+    "joblib",
+    "netCDF4",
+    "xarray",
+    "pyyaml",
+    "pydantic>=2.0",
+    "pandas",
+    "fsspec",
+    "intake-esm-access>2025.9.11",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/ncar-xdev/ecgtools"
+Documentation = "https://ecgtools.readthedocs.io/"
+Source = "https://github.com/ncar-xdev/ecgtools"
+Tracker = "https://github.com/ncar-xdev/ecgtools/issues"
+
+[tool.setuptools.packages.find]
+include = ["ecgtools", "ecgtools.*"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "dirty-tag"
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+skip-string-normalization = true
+
+[tool.pixi.workspace]
+channels = ["accessnri", "conda-forge", "nodefaults"]
+name = "ecgtools-dev"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tool.pixi.dependencies]
+cf_xarray = "*"
+fsspec = "*"
+joblib = "*"
+netcdf4 = "*"
+pip = "*"
+pydantic = ">=2.0"
+pyyaml = "*"
+xarray = "*"
+intake-esm-access = { channel = "accessnri" }
+
+[tool.pixi.feature.dev.pypi-dependencies]
+ecgtools = {path = ".", editable = true}
+
+[tool.pixi.feature.dev.dependencies]
+gcsfs = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-sugar = "*"
+pytest-xdist = "*"
+s3fs = "*"
+
+[tool.pixi.environments]
+dev = { features = ["dev"], solve-group = "default" }
+
