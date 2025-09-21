@@ -61,16 +61,6 @@ name = "ecgtools-dev"
 platforms = ["osx-arm64", "linux-64", "win-64"]
 version = "0.1.0"
 
-[tool.pixi.dependencies]
-cf_xarray = "*"
-fsspec = "*"
-joblib = "*"
-netcdf4 = "*"
-pip = "*"
-pydantic = ">=2.0"
-pyyaml = "*"
-xarray = "*"
-intake-esm-access = { channel = "accessnri" }
 
 [tool.pixi.feature.dev.pypi-dependencies]
 ecgtools = {path = ".", editable = true}
@@ -86,7 +76,7 @@ s3fs = "*"
 coverage = "*"
 
 [tool.pixi.environments]
-dev = { features = ["dev"], solve-group = "default" }
+default = { features = ["dev"], solve-group = "default" }
 test-py310 = { features = ["py310", "dev"] }
 test-py311 = { features = ["py311", "dev"] }
 test-py312 = { features = ["py312", "dev"] }
