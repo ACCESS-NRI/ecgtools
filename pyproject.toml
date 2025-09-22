@@ -75,8 +75,16 @@ pytest-xdist = "*"
 s3fs = "*"
 coverage = "*"
 
+[tool.pixi.feature.build.dependencies]
+setuptools = "*"
+setuptools-scm = "*"
+wheel = "*"
+twine = "*"
+check-manifest = "*"
+
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
+build = { features = ["py310","build"] }
 test-py310 = { features = ["py310", "dev"] }
 test-py311 = { features = ["py311", "dev"] }
 test-py312 = { features = ["py312", "dev"] }
@@ -86,6 +94,10 @@ test-py313 = { features = ["py313", "dev"] }
 [tool.pixi.feature.dev.tasks]
 test = {cmd = "pytest tests", description = "Run tests"}
 test-cov = {cmd = "coverage run -m --source=ecgtools pytest tests && coverage xml", description = "Run tests with coverage and generate xml report"}
+pre-commit-pre-push = {cmd = "pre-commit install --hook-type pre-push", description = "Install pre-commit pre-push hook"}
+
+[tool.pixi.feature.build.tasks]
+build = {cmd = "git clean -xdf && git restore -SW . && python -m build --sdist --wheel .", description = "Build tarball and wheels"}
 
 [tool.pixi.feature.py310.dependencies]
 python = "3.10.*"
