@@ -71,6 +71,13 @@ parentdir_prefix = "ecgtools-"
         "versioneer.py",
     ]
 
+[tool.prettier.config]
+ignore = [
+    "**/_version.py",
+    "**/versioneer.py",
+    ".conda/meta.yaml",
+]
+
 
 [tool.pixi.workspace]
 channels = ["accessnri", "conda-forge", "nodefaults"]
