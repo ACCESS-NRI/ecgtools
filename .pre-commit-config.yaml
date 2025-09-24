@@ -55,6 +55,6 @@ repos:
     hooks:
       - id: pixi-lock-update
         name: Update pixi.lock
-        entry: bash -c 'pixi install --all && pixi lock'
+        entry: pixi lock
         language: system
         pass_filenames: false
