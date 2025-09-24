@@ -134,7 +134,7 @@ validate-version = { depends-on = ["check-dist"], cmd = [
 
 
 get-version = { cmd = [
-     "pixi run python -c 'import ecgtools; print (ecgtools.__version__)'"
+     "python -c 'import ecgtools; print (ecgtools.__version__)'"
 ], description = "Get the package version" }
 
 test-wheel = { cmd = [
