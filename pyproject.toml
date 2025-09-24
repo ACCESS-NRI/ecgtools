@@ -121,10 +121,8 @@ test-cov = {cmd = "coverage run -m --source=ecgtools pytest tests && coverage xm
 pre-commit-pre-push = {cmd = "pre-commit install --hook-type pre-push", description = "Install pre-commit pre-push hook"}
 
 [tool.pixi.feature.build.tasks]
-build = {cmd = "git clean -xdf && git restore -SW . && python -m build --sdist --wheel .", description = "Build tarball and wheels"}
-check-dist = { depends-on = ["build"], cmd = [
-    "python", "-m", "twine", "check", "dist/*"
-], description = "Check built distribution files"}
+build = {cmd = "git clean -xdf && git restore -SW . && pixi run python -m build --sdist --wheel .", description = "Build tarball and wheels"}
+check-dist = { depends-on = ["build"], cmd = "pixi run python -m twine check dist/*", description = "Check built distribution files"}
 
 validate-version = { depends-on = ["check-dist"], cmd = [
     "bash", "-c",

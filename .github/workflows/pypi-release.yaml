@@ -19,7 +19,7 @@ jobs:
           environments: build
 
       - name: Build tarball and wheels, check artifacts, and validate version
-        run: pixi run -e build validate-version
+        run: pixi clean && pixi run -e build validate-version
 
       - uses: actions/upload-artifact@v4
         with:
