@@ -1,5 +1,6 @@
 name: ecgtools-doc
 channels:
+  - accessnri
   - conda-forge
   - nodefaults
 dependencies:
@@ -20,5 +21,5 @@ dependencies:
   - pip:
       - sphinxext-opengraph
       - -r ../requirements.txt
-      - git+https://github.com/intake/intake-esm
+      - git+https://github.com/access-nri/intake-esm
       - -e ..

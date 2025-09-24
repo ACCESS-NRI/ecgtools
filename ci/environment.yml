@@ -1,12 +1,13 @@
 name: ecgtools-dev
 channels:
+  - accessnri
   - conda-forge
   - nodefaults
 dependencies:
   - cf_xarray
   - fsspec
   - gcsfs
-  - intake-esm
+  - accessnri::intake-esm-access
   - joblib
   - netcdf4
   - pip
@@ -19,5 +20,3 @@ dependencies:
   - pyyaml
   - s3fs
   - xarray
-  - pip:
-      - git+https://github.com/intake/intake-esm
