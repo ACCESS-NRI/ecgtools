@@ -67,6 +67,9 @@ jobs:
         run: |
           echo "ecgtools-version=$(pixi run get-version)" >> $GITHUB_OUTPUT
 
+      - name: Show package version
+        run: echo "ecgtools-version=${{ steps.verify.outputs.ecgtools-version }}"
+
   pypi:
     needs: [build-artifacts, test-built-dist]
     runs-on: ubuntu-latest
