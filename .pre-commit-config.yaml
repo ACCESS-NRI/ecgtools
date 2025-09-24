@@ -55,6 +55,6 @@ repos:
     hooks:
       - id: pixi-lock-update
         name: Update pixi.lock
-        entry: pixi lock
+        entry: pixi lock -q
         language: system
         pass_filenames: false
