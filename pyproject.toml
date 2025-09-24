@@ -104,6 +104,7 @@ setuptools-scm = "*"
 wheel = "*"
 twine = "*"
 check-manifest = "*"
+pip = ">=25.2,<26"
 
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
