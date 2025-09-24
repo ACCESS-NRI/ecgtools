@@ -58,7 +58,7 @@ jobs:
 
       - name: Verify the built dist/wheel is valid
         if: github.event_name == 'push'
-        run: pixi run -e test-wheel test-wheel
+        run: pixi run test-wheel
 
       - name: Grab package version
         id: verify
