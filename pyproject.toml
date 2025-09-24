@@ -133,9 +133,7 @@ validate-version = { depends-on = ["check-dist"], cmd = [
 ], description = "Validate version number is set properly"}
 
 
-get-version = { cmd = [
-     "python -c 'import ecgtools; print (ecgtools.__version__)'"
-], description = "Get the package version" }
+get-version = { cmd = ["python", "-c", "import ecgtools; print(ecgtools.__version__)"], description = "Get the package version" }
 
 test-wheel = { cmd = [
     "bash", "-c",
