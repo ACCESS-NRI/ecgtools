@@ -75,9 +75,11 @@ jobs:
 
   conda:
     name: build and deploy to conda
-    needs: pypi
+    needs: [pypi, test-built-dist]
     if: always() && needs.pypi.result == 'success'
     runs-on: "ubuntu-latest"
+    env:
+      ECGTOOLS_VERSION: ${{ needs.test-built-dist.outputs.ecgtools-version }}
 
     steps:
       - name: Checkout source
@@ -92,18 +94,18 @@ jobs:
           auto-update-conda: false
           auto-activate-base: false
           show-channel-urls: true
-          
+
       - name: Enforce .tar.bz2 packages
         shell: bash
         run: |
-            cat > ~/.condarc << EOF
-            conda-build:
-                pkg_format: .tar.bz2
-            channels:
-                - accessnri
-                - conda-forge
-                - nodefaults
-            EOF
+          cat > ~/.condarc << EOF
+          conda-build:
+              pkg_format: .tar.bz2
+          channels:
+              - accessnri
+              - conda-forge
+              - nodefaults
+          EOF
 
       - name: Build and upload the conda package
         uses: uibcdf/action-build-and-upload-conda-packages@v1.4.0

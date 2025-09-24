@@ -120,7 +120,7 @@ check-dist = { depends-on = ["build"], cmd = [
 ], description = "Check built distribution files"}
 
 validate-version = { depends-on = ["check-dist"], cmd = [
-    "bash", "-c", 
+    "bash", "-c",
     "if [ -f dist/ecgtools-0.0.0.tar.gz ]; then echo '❌ INVALID VERSION NUMBER' && exit 1; else echo '✅ Looks good'; fi"
 ], description = "Validate version number is set properly"}
 
