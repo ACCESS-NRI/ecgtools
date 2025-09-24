@@ -106,6 +106,9 @@ twine = "*"
 check-manifest = "*"
 pip = ">=25.2,<26"
 
+[tool.pixi.feature.build.pypi-dependencies]
+build = "*"
+
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
 build = { features = ["py310","build"] }
