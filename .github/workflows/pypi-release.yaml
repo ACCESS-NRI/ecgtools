@@ -35,16 +35,16 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: releases
-          path: dist
-
       - name: Checkout only pyproject.toml
         uses: actions/checkout@v4
         with:
           sparse-checkout: pyproject.toml
           fetch-depth: 1
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: releases
+          path: dist
 
       - uses: prefix-dev/setup-pixi@v0.8.3
         with:
