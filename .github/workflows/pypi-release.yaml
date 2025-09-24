@@ -17,6 +17,7 @@ jobs:
       - uses: prefix-dev/setup-pixi@v0.8.3
         with:
           environments: build
+          frozen: true
 
       - name: Build tarball and wheels, check artifacts, and validate version
         run: pixi clean && pixi run -e build validate-version
@@ -50,6 +51,7 @@ jobs:
         with:
           environments: build
           manifest-path: pyproject.toml
+          frozen: true
 
       - name: List contents of built dist
         run: |
