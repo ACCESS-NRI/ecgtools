@@ -1,15 +1,15 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2","versioneer[toml]"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ecgtools"
-description = "ESM Catalog Generation Utilities"
+name = "ecgtools-access"
+description = "ESM Catalog Generation Utilities. This is the ACCESS-NRI bleeding edge fork."
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "Apache Software License 2.0"}
 maintainers = [
-    {name = "NCAR XDev Team", email = "xdev@ucar.edu"}
+    { name = "ACCESS-NRI", email = "charles.turner@anu.edu.au" }
 ]
 keywords = ["ecgtools"]
 classifiers = [
@@ -38,10 +38,10 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/ncar-xdev/ecgtools"
+Homepage = "https://github.com/access-nri/ecgtools"
 Documentation = "https://ecgtools.readthedocs.io/"
-Source = "https://github.com/ncar-xdev/ecgtools"
-Tracker = "https://github.com/ncar-xdev/ecgtools/issues"
+Source = "https://github.com/access-nri/ecgtools"
+Tracker = "https://github.com/access-nri/ecgtools/issues"
 
 [tool.setuptools.packages.find]
 include = ["ecgtools", "ecgtools.*"]
@@ -55,11 +55,28 @@ line-length = 100
 target-version = ['py310']
 skip-string-normalization = true
 
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "ecgtools/_version.py"
+versionfile_build = "ecgtools/_version.py"
+tag_prefix = "v"
+parentdir_prefix = "ecgtools-"
+
+
+[tool.coverage.run]
+    omit = [
+        "tests/*",
+        "docs/*",
+        "*/_version.py",
+        "versioneer.py",
+    ]
+
+
 [tool.pixi.workspace]
 channels = ["accessnri", "conda-forge", "nodefaults"]
 name = "ecgtools-dev"
 platforms = ["osx-arm64", "linux-64", "win-64"]
-version = "0.1.0"
 
 
 [tool.pixi.feature.dev.pypi-dependencies]
@@ -85,6 +102,7 @@ check-manifest = "*"
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
 build = { features = ["py310","build"] }
+test-wheel = { features = ["py310"] }
 test-py310 = { features = ["py310", "dev"] }
 test-py311 = { features = ["py311", "dev"] }
 test-py312 = { features = ["py312", "dev"] }
@@ -98,6 +116,20 @@ pre-commit-pre-push = {cmd = "pre-commit install --hook-type pre-push", descript
 
 [tool.pixi.feature.build.tasks]
 build = {cmd = "git clean -xdf && git restore -SW . && python -m build --sdist --wheel .", description = "Build tarball and wheels"}
+check-dist = { depends-on = ["build"], cmd = [
+    "python", "-m", "twine", "check", "dist/*"
+], description = "Check built distribution files"}
+
+validate-version = { depends-on = ["check-dist"], cmd = [
+    "bash", "-c", 
+    "if [ -f dist/ecgtools-0.0.0.tar.gz ]; then echo '❌ INVALID VERSION NUMBER' && exit 1; else echo '✅ Looks good'; fi"
+], description = "Validate version number is set properly"}
+
+
+test-wheel = { cmd = [
+    "bash", "-c",
+    "pixi run -e test-wheel python -m pip install dist/ecgtools*.whl && pixi run -e test-wheel python -c 'import ecgtools; print(ecgtools.__version__)'"
+], description = "Test installation of built wheel in clean environment"}
 
 [tool.pixi.feature.py310.dependencies]
 python = "3.10.*"
