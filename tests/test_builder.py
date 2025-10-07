@@ -195,3 +195,15 @@ def test_builder_invalid_save_kwargs(tmp_path):
             aggregations=[],
             groupby_attrs=[],
         )
+    with pytest.warns(DeprecationWarning, match='to_csv_kwargs is deprecated'):
+        builder.save(
+            name='test',
+            path_column_name='path',
+            directory=str(tmp_path),
+            data_format='netcdf',
+            variable_column_name='variables',
+            file_format='parquet',
+            to_csv_kwargs={'index': False},
+            aggregations=[],
+            groupby_attrs=[],
+        )
