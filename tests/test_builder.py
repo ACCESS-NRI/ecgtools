@@ -1,5 +1,6 @@
 import os
 import pathlib
+from pathlib import Path
 
 import intake
 import pandas as pd
@@ -148,3 +149,49 @@ def test_builder_save(tmp_path):
     assert not builder.invalid_assets.empty
     cat = intake.open_esm_datastore(str(tmp_path / 'test.json'))
     assert isinstance(cat.df, pd.DataFrame)
+
+
+def test_builder_save_pq(tmp_path):
+    builder = Builder(paths=[str(sample_data_dir / 'cesm')], depth=5, include_patterns=['*.nc'])
+    builder.get_assets()
+    builder.assets.append('cesm/nonexistent_file.nc')  # Add an invalid file
+
+    with pytest.warns(UserWarning):
+        builder.parse(parsing_func=parse_cesm_history).clean_dataframe()
+    with pytest.warns(UserWarning):
+        builder.save(
+            name='test',
+            path_column_name='path',
+            directory=str(tmp_path),
+            data_format='netcdf',
+            variable_column_name='variables',
+            file_format='parquet',
+            aggregations=[],
+            groupby_attrs=[],
+        )
+    assert not builder.invalid_assets.empty
+    cat = intake.open_esm_datastore(str(tmp_path / 'test.json'))
+    assert isinstance(cat.df, pd.DataFrame)
+    assert Path(cat.esmcat.catalog_file).name == 'test.parquet'
+
+
+def test_builder_invalid_save_kwargs(tmp_path):
+    builder = Builder(paths=[str(sample_data_dir / 'cesm')], depth=5, include_patterns=['*.nc'])
+    builder.get_assets()
+    builder.assets.append('cesm/nonexistent_file.nc')  # Add an invalid file
+
+    with pytest.warns(UserWarning):
+        builder.parse(parsing_func=parse_cesm_history).clean_dataframe()
+    with pytest.raises(ValueError, match='Cannot provide both `to_csv_kwargs` and `write_kwargs`'):
+        builder.save(
+            name='test',
+            path_column_name='path',
+            directory=str(tmp_path),
+            data_format='netcdf',
+            variable_column_name='variables',
+            file_format='parquet',
+            to_csv_kwargs={'index': False},
+            write_kwargs={'compression': 'snappy'},
+            aggregations=[],
+            groupby_attrs=[],
+        )
