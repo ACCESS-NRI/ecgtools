@@ -226,6 +226,8 @@ class Builder:
         description: typing.Optional[str] = None,
         directory: typing.Optional[str] = None,
         catalog_type: str = 'file',
+        file_format: str = 'csv',
+        write_kwargs: typing.Optional[dict] = None,
         to_csv_kwargs: typing.Optional[dict] = None,
         json_dump_kwargs: typing.Optional[dict] = None,
     ):
@@ -254,8 +256,13 @@ class Builder:
         catalog_type: str
             The type of catalog to save. Whether to save the catalog table as a dictionary
             in the JSON file or as a separate CSV file. Valid options are 'dict' and 'file'.
-        to_csv_kwargs : dict, optional
+        file_format: str
+            The file format to save the catalog table as. Valid options are 'csv' and 'parquet'.
+            If catalog_type is 'dict', this parameter is ignored.
+        write_kwargs : dict, optional
             Additional keyword arguments passed through to the :py:meth:`~pandas.DataFrame.to_csv` method.
+        to_csv_kwargs : dict, optional
+            Deprecated alias for write_kwargs.
         json_dump_kwargs : dict, optional
             Additional keyword arguments passed through to the :py:func:`~json.dump` function.
 
@@ -270,6 +277,21 @@ class Builder:
         See https://github.com/NCAR/esm-collection-spec/blob/master/collection-spec/collection-spec.md
         for more
         """
+        if to_csv_kwargs is not None:
+            warnings.warn(
+                'to_csv_kwargs is deprecated and will be removed in a future version. '
+                'Please use write_kwargs instead.',
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if write_kwargs is not None:
+                raise ValueError(
+                    'Cannot provide both `to_csv_kwargs` and `write_kwargs`. '
+                    'Please use `write_kwargs`.'
+                )
+            write_kwargs = to_csv_kwargs
+
+        write_kwargs = write_kwargs or {}
 
         for col in {variable_column_name, path_column_name}.union(set(groupby_attrs or [])):
             assert col in self.df.columns, f'{col} must be a column in the dataframe.'
@@ -296,7 +318,8 @@ class Builder:
             name=name,
             directory=directory,
             catalog_type=catalog_type,
-            to_csv_kwargs=to_csv_kwargs,
+            file_format=file_format,
+            write_kwargs=write_kwargs,
             json_dump_kwargs=json_dump_kwargs,
         )
 
